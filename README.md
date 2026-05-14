@@ -40,12 +40,34 @@ This installs all required dependencies (Python 3.11, trimesh, meshparty, neurog
 
 ## Usage
 
+### Querying soma positions with CAVEclient
+
+Use [CAVEclient](https://caveclient.readthedocs.io/) to look up soma positions in nanometers from the MICrONS minnie65 dataset. Pass `desired_resolution=[1,1,1]` to get coordinates in nm:
+
+```python
+from caveclient import CAVEclient
+
+client = CAVEclient('minnie65_public')
+
+# find the soma table name
+soma_table = client.info.get_datastack_info()['soma_table']
+
+# query for a specific neuron by root id, with positions in nm
+soma_df = client.materialize.query_table(
+    soma_table,
+    filter_equal_dict={'pt_root_id': YOUR_ROOT_ID},
+    desired_resolution=[1, 1, 1]
+)
+
+# extract soma position as [x, y, z] in nm
+soma_pos = soma_df.iloc[0]['pt_position']
+specimen_id = int(soma_df.iloc[0]['id'])
+```
+
+### Generating polygon files
+
 ```python
 from polygon_creation import make_poly_file, mesh_dict
-
-# soma position in nm (x, y, z)
-soma_pos = [800000, 200000, 900000]
-specimen_id = 12345
 
 # Generate the polygon dictionary
 poly_dict = make_poly_file(mesh_dict, soma_pos, specimen_id)
