@@ -1,0 +1,18 @@
+name: skeleton_keys_polygon
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - pandas
+  - trimesh
+  - matplotlib
+  - pip
+  - pip:
+      - meshparty
+      - neuroglancer-scripts
+      - nglui
+      - caveclient
+      - more-itertools
